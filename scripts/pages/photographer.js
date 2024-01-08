@@ -1,3 +1,4 @@
+// GET DATA
 async function getPhotographers() {
     try {
         const response = await fetch('data/photographers.json');
@@ -25,6 +26,7 @@ async function getMedia() {
 const params = new URLSearchParams(window.location.search);
 const photographerId = params.get('id');
 
+// CREATE MEDIAS
 function createMediaElement(item) {
     if (item.image) {
         const img = document.createElement('img');
@@ -41,6 +43,7 @@ function createMediaElement(item) {
     }
 }
 
+// HANDLE LIGHTBOX
 let currentLightboxIndex = 0;
 
 function prevLightboxItem(photographer, photographerMedia) {
@@ -52,7 +55,6 @@ function nextLightboxItem(photographer, photographerMedia) {
   currentLightboxIndex = (currentLightboxIndex + 1) % photographerMedia.length;
   displayLightboxItem(photographer, photographerMedia[currentLightboxIndex]);
 }
-
 
 function openLightbox(photographer, item, index) {
     const lightbox = document.getElementById("lightbox");
@@ -84,6 +86,7 @@ function displayLightboxItem(photographer, item) {
 
 let sortOption = 'popular'; 
 
+// DISPLAY DATA
 async function displayData(photographer, media) {
     const photographHeader = document.querySelector(".photograph-header");
     const photoGallery = document.querySelector('.photo-gallery');
@@ -91,11 +94,15 @@ async function displayData(photographer, media) {
     const totalLikesContainer = document.querySelector('.likes p')
     const photographerMedia = media.filter(item => item.photographerId === photographer.id);
     let totalLikes = photographerMedia.reduce((sum, item) => sum + item.likes, 0);
-    photographHeader.innerHTML = "";
+    
+    // photographHeader.innerHTML = "";
+    
     if (totalLikesContainer) {
         totalLikesContainer.textContent = totalLikes.toLocaleString();
     }
+
     photoGallery.innerHTML = '';
+    
     switch (sortOption) {
         case 'popular':
             photographerMedia.sort((a, b) => b.likes - a.likes);
