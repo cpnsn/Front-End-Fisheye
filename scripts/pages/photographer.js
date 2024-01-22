@@ -26,7 +26,16 @@ async function getMedia() {
 const params = new URLSearchParams(window.location.search);
 const photographerId = params.get('id');
 
-// CREATE MEDIAS
+// GET PHOTOGRAPHER DATA
+async function getPhotographerData() {
+    const photographers = await getPhotographers();
+    const media = await getMedia();
+    const photographer = photographers.find(photographer => photographer.name === photographerId);
+    const photographerMedia = media.filter(item => item.photographerId === photographer.id);
+    return { photographer, photographerMedia };
+}
+
+// CREATE MEDIA
 function createMediaElement(item) {
     if (item.image) {
         const img = document.createElement('img');
@@ -86,39 +95,10 @@ function displayLightboxItem(photographer, item) {
 
 let sortOption = 'popular'; 
 
-// DISPLAY DATA
-async function displayData(photographer, media) {
+// DISPLAY HEADER
+async function displayHeader(photographer) {
     const photographHeader = document.querySelector(".photograph-header");
-    const photoGallery = document.querySelector('.photo-gallery');
     const moddalDiv = document.querySelector(".modal-div");
-    const totalLikesContainer = document.querySelector('.likes p')
-    const photographerMedia = media.filter(item => item.photographerId === photographer.id);
-    let totalLikes = photographerMedia.reduce((sum, item) => sum + item.likes, 0);
-    
-    // photographHeader.innerHTML = "";
-    
-    if (totalLikesContainer) {
-        totalLikesContainer.textContent = totalLikes.toLocaleString();
-    }
-
-    photoGallery.innerHTML = '';
-    
-    switch (sortOption) {
-        case 'popular':
-            photographerMedia.sort((a, b) => b.likes - a.likes);
-            break;
-        case 'date':
-            photographerMedia.sort((a, b) => new Date(b.date) - new Date(a.date));
-            break;
-        case 'title':
-            photographerMedia.sort((a, b) => a.title.localeCompare(b.title));
-            break;
-        default:
-            break;
-    }
-
-    const photographerPicture = `assets/photographers/${photographer.portrait}`;
-
     const infoDiv = document.createElement('div');
     infoDiv.classList.add('info-div');
 
@@ -132,10 +112,58 @@ async function displayData(photographer, media) {
     tagline.textContent = `${photographer.tagline}`;
     tagline.classList.add('tagline');
 
+    const photographerPicture = `assets/photographers/${photographer.portrait}`;
     const img = document.createElement( 'img' );
         img.setAttribute("src", photographerPicture)
         img.setAttribute("alt", photographer.name)
 
+    infoDiv.appendChild(h1);
+    infoDiv.appendChild(location);
+    infoDiv.appendChild(tagline);
+    photographHeader.appendChild(img);
+
+    photographHeader.insertBefore(infoDiv, photographHeader.firstChild);
+
+    const modalTitle = document.createElement('h2');
+    modalTitle.textContent = `${photographer.name}`;
+
+    moddalDiv.appendChild(modalTitle);
+}
+
+// SORT MEDIA
+async function sortMedia(photographer, media) {
+    const photographerMedia = media.filter(item => item.photographerId === photographer.id);
+    
+    const sortedMedia = photographerMedia.slice().sort((a, b) => {
+        switch (sortOption) {
+            case 'popular':
+                return b.likes - a.likes;
+            case 'date':
+                return new Date(b.date) - new Date(a.date);
+            case 'title':
+                return a.title.localeCompare(b.title);
+            default:
+                return photographerMedia;
+        }
+    })
+    return sortedMedia;
+};
+
+// DISPLAY DATA
+async function displayData(photographer, media) {
+    const photoGallery = document.querySelector('.photo-gallery');
+    const totalLikesContainer = document.querySelector('.likes p')
+    let photographerMedia = media.filter(item => item.photographerId === photographer.id);
+    photographerMedia = await sortMedia(photographer, photographerMedia);
+
+    let totalLikes = photographerMedia.reduce((sum, item) => sum + item.likes, 0);
+    
+    if (totalLikesContainer) {
+        totalLikesContainer.textContent = totalLikes.toLocaleString();
+    }
+
+    photoGallery.innerHTML = '';
+    
         photographerMedia.forEach((item, index) => {
             const mediaElement = createMediaElement(item);
             
@@ -168,20 +196,6 @@ async function displayData(photographer, media) {
           
             photoGallery.appendChild(container);
           });
-    
-    infoDiv.appendChild(h1);
-    infoDiv.appendChild(location);
-    infoDiv.appendChild(tagline);
-    photographHeader.appendChild(img);
-
-    photographHeader.insertBefore(infoDiv, photographHeader.firstChild);
-
-    const modalTitle = document.createElement('h2');
-    modalTitle.textContent = `${photographer.name}`;
-
-    moddalDiv.appendChild(modalTitle);
-
-    return (photographHeader, modalTitle);
 }
 
 function updateTotalLikes(photographerMedia, totalLikesContainer) {
@@ -192,13 +206,37 @@ function updateTotalLikes(photographerMedia, totalLikesContainer) {
     }
 }
 
+function toggleOptions() {
+    const title = document.querySelector('.select-title');
+    const options = document.querySelector('.select-options');
+    options.style.display = options.style.display === 'none' ? 'block' : 'none';
+    title.style.display = options.style.display === 'none' ? 'block' : 'none';
+  } 
+
+  async function selectOption(option) {
+    sortOption = option;
+
+    const title = document.querySelector('.select-title');
+    const options = document.querySelector('.select-options');
+    options.style.display = 'none';
+    title.style.display = 'block';
+    const optionTranslations = {
+        'popular': 'Popularité',
+        'date': 'Date',
+        'title': 'Titre'
+      };
+  
+    title.innerText = optionTranslations[option] || option;    
+    
+    const { photographer, photographerMedia } = await getPhotographerData(photographerId);
+    displayData(photographer, photographerMedia);
+}
 
 async function init() {
-    const photographers = await getPhotographers();
-    const media = await getMedia();
-    const photographer = photographers.find(photographer => photographer.name === photographerId);
-    const photographerMedia = media.filter(item => item.photographerId === photographer.id);
+    let { photographer, photographerMedia } = await getPhotographerData(photographerId);
+    photographerMedia = await sortMedia(photographer, photographerMedia);
 
+    displayHeader(photographer)
     displayData(photographer, photographerMedia);
 
     document.getElementById('left-arrow').addEventListener('click', () => prevLightboxItem(photographer, photographerMedia));
@@ -207,15 +245,3 @@ async function init() {
 }
 
 init();
-
-function toggleOptions() {
-    const title = document.querySelector('.select-title');
-    const options = document.querySelector('.select-options');
-    options.style.display = options.style.display === 'none' ? 'block' : 'none';
-    title.style.display = options.style.display === 'none' ? 'block' : 'none';
-  } 
-
-  function selectOption(option) {
-    sortOption = option;
-    init();
-}
