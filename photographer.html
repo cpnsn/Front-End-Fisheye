@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <meta charset="utf-8">
@@ -8,9 +8,11 @@
     <title>Fisheye - photographe </title>
   </head>
   <body>
+
     <header>
-      <a href="/Front-End-Fisheye/"><img src="assets/images/logo.png" class="logo" /></a>
+      <a href="/Front-End-Fisheye/"><img src="assets/images/logo.png" class="logo" alt="Fisheye Home page"/></a>
     </header>
+    
     <main id="main">
       <div class="photograph-header">
         <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
@@ -50,7 +52,7 @@
           <div class="modal-div">
             <h2 >Contactez-moi</h2>
           </div>
-          <img src="assets/icons/close.svg" onclick="closeModal()" />
+          <img src="assets/icons/close.svg" alt="Close dialog" onclick="closeModal()" />
         </header>
 				<form method="post" onsubmit="return logData()">
 					<div>
@@ -68,12 +70,18 @@
 			</div>
 		</div>
 
-    <div id="lightbox">
+    <div id="lightbox" role="dialog">
       <div class="lightbox-main-container">
-      <img src="assets/icons/left_arrow.svg" alt="icon" id="left-arrow"/>
+        <button id="left-arrow-button" tabIndex="0">
+          <img src="assets/icons/left_arrow.svg" alt="Previous image" id="left-arrow"/>
+        </button>
       <div id="lightbox-container"></div>
-        <img src="assets/icons/close_lightbox.svg" alt="icon" id="close-lightbox"/>
-        <img src="assets/icons/right_arrow.svg" alt="icon" id="right-arrow"/>
+        <img src="assets/icons/close_lightbox.svg" alt="Close dialog" id="close-lightbox"/>
+        <button id="right-arrow-button">
+          <img src="assets/icons/right_arrow.svg" alt="Next image" id="right-arrow"/>
+        </button>
+        <button id="close-lightbox-button">
+        </button>
       </div>
     </div>
 

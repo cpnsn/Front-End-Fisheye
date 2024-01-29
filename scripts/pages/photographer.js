@@ -3,7 +3,7 @@ async function getPhotographers() {
     try {
         const response = await fetch('data/photographers.json');
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         return data.photographers;
     } catch (error) {
         console.error('error fetching data', error);
@@ -15,7 +15,7 @@ async function getMedia() {
     try {
         const response = await fetch('data/photographers.json');
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         return data.media;
     } catch (error) {
         console.error('error fetching media data', error);
@@ -40,10 +40,19 @@ function createMediaElement(item) {
     if (item.image) {
         const img = document.createElement('img');
         img.src = `assets/photographs/${item.image}`;
+        img.alt = `${item.title}`;
+        img.tabIndex = "0";
+        img.addEventListener('keydown', async (event) => {
+            if (event.key === 'Enter') {
+                const { photographer, photographerMedia } = await getPhotographerData();
+                openLightbox(photographer, item, photographerMedia.indexOf(item));
+            }
+        });
         return img;
     } else if (item.video) {
         const video = document.createElement('video');
         video.src = `assets/photographs/${item.video}`;
+        video.title = `${item.title} video`;
         video.autoplay = true;
         video.controls = true;
         return video;
@@ -55,21 +64,60 @@ function createMediaElement(item) {
 // HANDLE LIGHTBOX
 let currentLightboxIndex = 0;
 
-function prevLightboxItem(photographer, photographerMedia) {
+function prevLightboxItem(photographer, photographerMedia, event) {
   currentLightboxIndex = (currentLightboxIndex - 1 + photographerMedia.length) % photographerMedia.length;
   displayLightboxItem(photographer, photographerMedia[currentLightboxIndex]);
 }
 
-function nextLightboxItem(photographer, photographerMedia) {
+function nextLightboxItem(photographer, photographerMedia, event) {
   currentLightboxIndex = (currentLightboxIndex + 1) % photographerMedia.length;
   displayLightboxItem(photographer, photographerMedia[currentLightboxIndex]);
 }
+
+document.addEventListener('keydown', async (event) => {
+    const lightbox = document.getElementById("lightbox");
+    const { photographer, photographerMedia } = await getPhotographerData(photographerId);
+
+
+    if (lightbox.style.display === "flex") {
+        if (event.key === 'ArrowLeft') {
+            prevLightboxItem(photographer, photographerMedia, event);
+        } else if (event.key === 'ArrowRight') {
+            nextLightboxItem(photographer, photographerMedia, event);
+        } else if (event.key === 'Escape') {
+            closeLightbox();
+        }
+    }
+    document.getElementById('left-arrow-button').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            prevLightboxItem(photographer, photographerMedia, event);
+        }
+    });
+    
+    document.getElementById('close-lightbox-button').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            closeLightbox();
+        }
+    });
+    
+    document.getElementById('right-arrow-button').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            nextLightboxItem(photographer, photographerMedia, event);
+        }
+    });
+});
+
 
 function openLightbox(photographer, item, index) {
     const lightbox = document.getElementById("lightbox");
 	lightbox.style.display = "flex";
     currentLightboxIndex = index;
     displayLightboxItem(photographer, item);
+    
+    const firstFocusableElement = lightbox.querySelector('[tabindex="0"]');
+    if (firstFocusableElement) {
+        firstFocusableElement.focus();
+    }
 }
 
 function closeLightbox() {
@@ -166,11 +214,11 @@ async function displayData(photographer, media) {
     
         photographerMedia.forEach((item, index) => {
             const mediaElement = createMediaElement(item);
-            
+            mediaElement.style.cursor = "pointer";
             const title = document.createElement('p');
             title.textContent = item.title;
             
-            const likes = document.createElement('div');
+            const likes = document.createElement('button');
             likes.innerHTML = `${item.likes} <img id="likes-svg" src="assets/icons/heart.svg">`;
 
             likes.addEventListener('click', () => {

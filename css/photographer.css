@@ -160,6 +160,15 @@ main {
     justify-content: space-between;
 }
 
+.title-likes button {
+    background-color: #FFF;
+    border: none;
+}
+
+.title-likes button img {
+    cursor: pointer;
+}
+
 .photo-container {
     margin: 1.5rem;
     width: 30%
@@ -192,6 +201,7 @@ main {
 
 #lightbox {
     color: #901C1C; 
+    z-index: 999;
 }
 
 .lightbox-main-container {
@@ -204,11 +214,20 @@ main {
     margin-right: 30px;
 }
 
+#left-arrow, #right-arrow, #close-lightbox {
+    cursor: pointer;
+}
+
 #close-lightbox {
     position: absolute;
     right: 0;
     top: 0;
     margin-right: 15px;
+}
+
+#lightbox button {
+    background-color: #FFF;
+    border: none;
 }
 
 .contact_button {
