@@ -12,7 +12,6 @@ function photographerTemplate(data) {
 
         const img = document.createElement( 'img' );
         img.setAttribute("src", picture)
-        img.setAttribute("alt", name)
 
         const h2 = document.createElement( 'h2' );
         h2.textContent = name;
@@ -32,8 +31,6 @@ function photographerTemplate(data) {
         p3.textContent = price + '€/jour';
         p3.setAttribute("id", "price");
 
-        // article.appendChild(img);
-        // article.appendChild(h2);
         article.appendChild(a);
         article.appendChild(p1);
         article.appendChild(p2);

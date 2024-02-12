@@ -5,7 +5,6 @@ body {
     margin: 0;
 }
 
-
 header {
     display: flex;
     flex-direction: row;
@@ -47,7 +46,7 @@ h1 {
 }
 
 .photographer_section #location {
-    color: #D3573C;
+    color: #901C1C;
     margin-top: 0.2rem;
     margin-bottom: 0;
 }

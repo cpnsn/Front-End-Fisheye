@@ -15,23 +15,25 @@
     
     <main id="main">
       <div class="photograph-header">
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+        <button id="contact-button" aria-label="Contact Me" class="contact_button">Contactez-moi</button>
       </div>
-      
-      <div id="select-form">
-        <div class="label">
+
+    <div id="select-form">
+      <div class="label">
           <label for="select-menu">Trier par</label>
-        </div>
-        <div>
-          <div class="select-title" onclick="toggleOptions()">Popularité</div>
-          <div class="select-options">
-            <div id="select-popular" onclick="selectOption('popular')">Popularité</div>
-            <div id="select-date" onclick="selectOption('date')">Date</div>
-            <div id="select-title" onclick="selectOption('title')">Titre</div>
-          </div>
-        </div>
-        <input type="hidden" name="select" id="selected-value">      
       </div>
+      <div role="listbox" id="select-menu" aria-labelledby="select-menu">
+          <div role="button" tabindex="0" class="select-title" onclick="toggleOptions()" aria-haspopup="listbox" aria-expanded id="select-menu-button">
+              Popularité
+          </div>
+          <div class="select-options" role="listbox" aria-labelledby="select-menu">
+              <div role="listbox" aria-activedescendant aria-selected id="select-popular" onclick="selectOption('popular')" tabindex="0">Popularité</div>
+              <div role="listbox" aria-activedescendant aria-selected id="select-date" onclick="selectOption('date')" tabindex="0">Date</div>
+              <div role="listbox" aria-activedescendant aria-selected id="select-title" onclick="selectOption('title')" tabindex="0">Titre</div>
+          </div>
+      </div>
+      <input type="hidden" name="select" id="selected-value">
+  </div> 
 
       <div class="photo-gallery"></div>
 
@@ -46,18 +48,20 @@
       </div>
     </main>
 
-    <div id="contact_modal">
+    <div id="contact_modal" role="dialog">
 			<div class="modal">
 				<header class="modal-header">
           <div class="modal-div">
             <h2 >Contactez-moi</h2>
           </div>
-          <img src="assets/icons/close.svg" alt="Close dialog" onclick="closeModal()" />
+          <button aria-label="Close contact form" id="close-modal-button">
+            <img src="assets/icons/close.svg" alt="Close dialog" onclick="closeModal()"/>
+          </button>
         </header>
-				<form method="post" onsubmit="return logData()">
+				<form id="contact-form" method="post">
 					<div>
 						<label for="firstname">Prénom</label>
-						<input name="firstname" id="firstname" required/>
+						<input name="firstname" id="firstname" required tabIndex="0"/>
             <label for="lastname">Nom</label>
 						<input name="lastname" id="lastname" required/>
             <label for="email">Email</label>
@@ -65,12 +69,12 @@
             <label for="message">Votre message</label>
 						<input name="message" id="message" required/>
 					</div>
-          <button type="submit" class="contact_button">Envoyer</button>
+          <button aria-label="Send" type="submit" class="contact_button">Envoyer</button>
 				</form>
 			</div>
 		</div>
 
-    <div id="lightbox" role="dialog">
+    <div id="lightbox" role="dialog" aria-label="image closeup view">
       <div class="lightbox-main-container">
         <button id="left-arrow-button" tabIndex="0">
           <img src="assets/icons/left_arrow.svg" alt="Previous image" id="left-arrow"/>

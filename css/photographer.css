@@ -46,7 +46,6 @@ main {
 .modal header h2 {
     font-size: 40px;
     font-weight: normal;
-    /* text-align: center; */
     margin: 0;
 }
 
@@ -54,10 +53,14 @@ main {
     margin-bottom: 2rem;
 }
 
+#close-modal-button {
+    border: none;
+    background-color: #DB8876;
+}
+
 .photograph-header {
     background-color: #FAFAFA;
     height: 300px;
-    /* margin: 0 100px; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -75,7 +78,7 @@ main {
 }
 
 .photograph-header .tagline {
-    color: grey;
+    color: rgb(95, 95, 95);
     font-size: 1rem;
 }
 
@@ -95,6 +98,7 @@ main {
 
 .label {
     margin-bottom: 4rem;
+    margin-top: 1rem;
     margin-right: 20px;
     font-size: 1rem;
     font-weight: bold;
@@ -135,7 +139,6 @@ main {
     border-top-left-radius: 5px;
     display: inline-flex;
     padding: 0 1.5rem;
-    /* z-index: 999; */
 }
 
 .likes {
@@ -150,8 +153,8 @@ main {
 .photo-gallery {
     display: flex;
     flex-wrap: wrap;
-    margin : 0 -1.5rem;
-    /* justify-content: space-between; */
+    justify-content: space-between;
+    margin-bottom: 3rem;
 }
 
 .title-likes {
@@ -170,7 +173,6 @@ main {
 }
 
 .photo-container {
-    margin: 1.5rem;
     width: 30%
 }
 
@@ -186,12 +188,6 @@ main {
     height: 15px;
 }
 
-/* #lightbox svg {
-    fill: #901C1C;
-    color: #901C1C;
-} */
-
-/* height et width impactent photos et video page photographe */
 .photo-lightbox img, video {
     height: 700px;
     width: 700px;
@@ -242,7 +238,6 @@ main {
     border-radius: 5px;
     cursor: pointer;
 }
-
 
 form {
     display: flex;
