@@ -104,9 +104,21 @@ main {
     font-weight: bold;
 }
 
+#select-menu-button, #select-popular {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#select-menu-button img, .select-options img {
+    margin-left: 1rem;
+}
+
 .select-options {
     display: none;
     position: absolute;
+    cursor: pointer;
+    z-index: 10;
 }
 
 .select-options, .select-title {
@@ -259,7 +271,7 @@ form div {
     margin-bottom: 26px;
 }
 
-form input {
+form input, form textarea {
     width: 100%;
     height: 68px;
     border: none;

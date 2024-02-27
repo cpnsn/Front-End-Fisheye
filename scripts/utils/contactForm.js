@@ -22,6 +22,11 @@ function displayModal() {
                     closeModal();
                 }
             });
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            })
 }
 
 const contactButton = document.getElementById('contact-button');

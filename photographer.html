@@ -21,13 +21,17 @@
     <div id="select-form">
       <div class="label">
           <label for="select-menu">Trier par</label>
-      </div>
-      <div role="listbox" id="select-menu" aria-labelledby="select-menu">
+        </div>
+        <div role="listbox" id="select-menu" aria-labelledby="select-menu">
           <div role="button" tabindex="0" class="select-title" onclick="toggleOptions()" aria-haspopup="listbox" aria-expanded id="select-menu-button">
-              Popularité
+            Popularité
+            <img src="assets/icons/arrow_down.svg" alt="icon" id="arrow-down"/>
           </div>
           <div class="select-options" role="listbox" aria-labelledby="select-menu">
-              <div role="listbox" aria-activedescendant aria-selected id="select-popular" onclick="selectOption('popular')" tabindex="0">Popularité</div>
+            <div role="listbox" aria-activedescendant aria-selected id="select-popular" onclick="selectOption('popular')" tabindex="0">
+              Popularité
+              <img src="assets/icons/arrow_up.svg" alt="icon" id="arrow-up"/>
+              </div>
               <div role="listbox" aria-activedescendant aria-selected id="select-date" onclick="selectOption('date')" tabindex="0">Date</div>
               <div role="listbox" aria-activedescendant aria-selected id="select-title" onclick="selectOption('title')" tabindex="0">Titre</div>
           </div>
@@ -67,7 +71,7 @@
             <label for="email">Email</label>
 						<input name="email" id="email" required/>
             <label for="message">Votre message</label>
-						<input name="message" id="message" required/>
+						<textarea name="message" id="message" required></textarea>
 					</div>
           <button aria-label="Send" type="submit" class="contact_button">Envoyer</button>
 				</form>

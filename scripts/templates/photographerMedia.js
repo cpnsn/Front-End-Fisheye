@@ -191,11 +191,17 @@ async function displayData(photographer, media) {
             const likes = document.createElement('button');
             likes.innerHTML = `${item.likes} <img id="likes-svg" alt="likes" src="assets/icons/heart.svg">`;
 
+            item.liked = false;
+
             likes.addEventListener('click', () => {
-                item.likes += 1;
+                if (item.liked) {
+                    item.likes -= 1;
+                } else {
+                    item.likes += 1;
+                }
+                
+                item.liked = !item.liked; 
                 likes.innerHTML = `${item.likes} <img id="likes-svg" alt="likes" src="assets/icons/heart.svg">`;
-                likes.style.pointerEvents = 'none';
-                likes.disabled = true; 
 
                 updateTotalLikes(photographerMedia, totalLikesContainer)
             })
@@ -228,8 +234,14 @@ function updateTotalLikes(photographerMedia, totalLikesContainer) {
 function toggleOptions() {
     const title = document.querySelector('.select-title');
     const options = document.querySelector('.select-options');
-    options.style.display = options.style.display === 'none' ? 'block' : 'none';
-    title.style.display = options.style.display === 'none' ? 'block' : 'none';
+
+    if (options.style.display === 'none' || options.style.display === '') {
+        title.style.display = 'none';
+        options.style.display = 'block';
+    } else {
+        title.style.display = 'flex';
+        options.style.display = 'none';
+    }
   }
 
   document.addEventListener('keydown', function (event) {
@@ -269,7 +281,7 @@ async function selectOption(option) {
     const title = document.querySelector('.select-title');
     const options = document.querySelector('.select-options');
     options.style.display = 'none';
-    title.style.display = 'block';
+    title.style.display = 'flex';
     const optionTranslations = {
         'popular': 'Popularité',
         'date': 'Date',
@@ -277,6 +289,11 @@ async function selectOption(option) {
     };
 
     title.innerText = optionTranslations[option] || option;
+
+    const arrowDown = document.createElement('img');
+    arrowDown.src = 'assets/icons/arrow_down.svg';
+    arrowDown.alt = 'icon';
+    title.appendChild(arrowDown);
 
     const { photographer, photographerMedia } = await getPhotographerData(photographerId);
     sortMedia(photographer, photographerMedia).then(sortedMedia => {
