@@ -1,7 +1,7 @@
 function displayModal() {
     const modal = document.getElementById("contact_modal");
 	modal.style.display = "flex";
-
+    previouslyFocusedElement = document.activeElement;
     const firstFocusableElement = modal.querySelector('[tabindex="0"]');
     
     if (firstFocusableElement) {
@@ -35,6 +35,7 @@ contactButton.addEventListener('click', displayModal);
 function closeModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "none";
+    previouslyFocusedElement.focus();
 }
 
 function logData() {
