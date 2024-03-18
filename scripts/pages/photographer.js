@@ -34,15 +34,10 @@ async function getPhotographerData() {
 }
 
 async function init() {
-    let { photographer, photographerMedia } = await getPhotographerData(photographerId);
-    photographerMedia = await sortMedia(photographer, photographerMedia);
+    let { photographer, photographerMedia } = await getPhotographerData();
 
     displayHeader(photographer)
     displayData(photographer, photographerMedia);
-
-    document.getElementById('left-arrow').addEventListener('click', () => prevLightboxItem(photographer, photographerMedia));
-    document.getElementById('right-arrow').addEventListener('click', () => nextLightboxItem(photographer, photographerMedia));
-    document.getElementById('close-lightbox').addEventListener('click', closeLightbox);
 }
 
 init();

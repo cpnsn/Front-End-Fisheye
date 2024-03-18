@@ -3,7 +3,6 @@ function photographerTemplate(data) {
 
     const picture = `assets/photographers/${portrait}`;
 
-    function getUserCardDOM() {
         const article = document.createElement( 'article' );
         article.setAttribute("aria-label", `${name} details`)
 
@@ -39,5 +38,3 @@ function photographerTemplate(data) {
 
         return (article);
     }
-    return { name, picture, getUserCardDOM }
-}
